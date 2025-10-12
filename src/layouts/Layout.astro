@@ -28,7 +28,7 @@ const {
 	</head>
 
 	<body
-		class="min-h-screen gradient-bg relative overflow-x-hidden bg-center bg-cover opacity-80"
+		class="min-h-screen gradient-bg relative overflow-x-hidden bg-center bg-cover"
 		style={`background-image: url(${bg.src});`}
 	>
 		<!-- Decorative Background Elements -->
@@ -49,7 +49,7 @@ const {
 		</div>
 
 		<div
-			class="absolute top-20 right-20 w-24 h-24 opacity-15 floating-icon"
+			class="absolute top-20 right-20 w-24 h-24 opacity-0 floating-icon"
 		>
 			<svg viewBox="0 0 100 100" class="w-full h-full text-accent">
 				<rect
@@ -71,7 +71,7 @@ const {
 			</svg>
 		</div>
 
-		<div class="absolute bottom-10 left-20 w-20 h-20 opacity-10">
+		<div class="absolute bottom-10 left-20 w-20 h-20 opacity-0">
 			<svg viewBox="0 0 100 100" class="w-full h-full text-secondary">
 				<path
 					d="M20,80 Q20,20 50,20 Q80,20 80,50 Q80,80 50,80 Q20,80 20,50"
@@ -144,38 +144,6 @@ const {
 				</div>
 			</div>
 		</footer>
-
-		<!-- Base JavaScript -->
-		<!-- <script>
-			// Base interactive functionality
-			document.addEventListener("DOMContentLoaded", function () {
-				// Cultural icons hover effect
-				const culturalIcons =
-					document.querySelectorAll(".cultural-icon");
-				culturalIcons.forEach((icon) => {
-					icon.addEventListener("mouseenter", function () {
-						this.style.transform = "scale(1.05) rotate(5deg)";
-					});
-
-					icon.addEventListener("mouseleave", function () {
-						this.style.transform = "scale(1) rotate(0deg)";
-					});
-				});
-
-				// Play buttons functionality
-				const playButtons = document.querySelectorAll(".play-button");
-				playButtons.forEach((button) => {
-					button.addEventListener("click", function () {
-						// Emit custom event for video play
-						const videoEvent = new CustomEvent("videoPlay", {
-							detail: { button: this },
-						});
-						document.dispatchEvent(videoEvent);
-					});
-				});
-			});
-		</script> -->
 	</body>
-
 
 </html>
