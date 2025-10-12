@@ -1,0 +1,218 @@
+---
+// src/components/VideoCard.astro
+interface Props {
+  videoId: string;
+  thumbnail?: string;
+  alt: string;
+}
+
+const { videoId, thumbnail, alt } = Astro.props;
+// YouTube genera thumbnails automáticamente
+const defaultThumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+---
+
+
+<!-- Video Article -->
+<article class="video-overlay" data-video-id={videoId}>
+  <img
+    src={thumbnail || defaultThumbnail}
+    alt={alt}
+    class="w-full h-64 md:h-80 object-cover rounded-2xl"
+  />
+  <button
+    class="play-button"
+    aria-label={`Reproducir video: ${alt}`}
+  >
+    <svg
+      class="w-8 h-8 text-primary ml-1"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M8 5v14l11-7z"></path>
+    </svg>
+  </button>
+</article>
+
+<!-- Modal -->
+<div class="video-modal hidden" id="video-modal">
+  <div class="modal-overlay"></div>
+  <div class="modal-content">
+    <button class="modal-close" aria-label="Cerrar video">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+    <div class="video-wrapper">
+      <iframe
+        id="youtube-player"
+        src=""
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<style>
+  .video-overlay {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 1rem;
+  }
+
+  .play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 64px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .play-button:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: white;
+  }
+
+  .video-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .video-modal.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+  }
+
+  .modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    z-index: 10000;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .modal-close:hover {
+    background: white;
+    transform: rotate(90deg);
+  }
+
+  .video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const videoCards = document.querySelectorAll('.video-overlay');
+    const modal = document.getElementById('video-modal');
+    const modalOverlay = modal?.querySelector('.modal-overlay');
+    const modalClose = modal?.querySelector('.modal-close');
+    const youtubePlayer = document.getElementById('youtube-player') as HTMLIFrameElement;
+
+    function openModal(videoId: string) {
+      if (!modal || !youtubePlayer) return;
+      
+      youtubePlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+      modal.classList.add('active');
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      if (!modal || !youtubePlayer) return;
+      
+      modal.classList.remove('active');
+      youtubePlayer.src = '';
+      document.body.style.overflow = '';
+      
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }
+
+    videoCards.forEach(card => {
+      const playButton = card.querySelector('.play-button');
+      const videoId = card.getAttribute('data-video-id');
+
+      if (playButton && videoId) {
+        playButton.addEventListener('click', () => openModal(videoId));
+        card.addEventListener('click', (e) => {
+          if (e.target !== playButton && !playButton.contains(e.target as Node)) {
+            openModal(videoId);
+          }
+        });
+      }
+    });
+
+    modalOverlay?.addEventListener('click', closeModal);
+    modalClose?.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+      }
+    });
+  });
+</script>
