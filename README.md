@@ -3,7 +3,10 @@
 ### 🌟 Descripción propuesta
 
 
-Cultura Vive es un proyecto creado con cariño para una gran persona: mi amiga Amlai. Nace con la intención de compartir, aprender y celebrar todo lo hermoso que nos inspira la cultura. Es un pequeño espacio hecho con amor para alguien que siempre ha sido una luz en mi camino.
+Cultura Vive es un proyecto creado con cariño para una gran persona: mi amiga AMALIA GRANDETT. Nace con la intención de compartir, aprender y celebrar todo lo hermoso que nos inspira la cultura. Es un pequeño espacio hecho con amor para alguien que siempre ha sido una luz en mi camino.
+
+
+####  MODO DE USO
 
 ```sh
 pnpm create astro@latest -- --template basics
