@@ -1,4 +1,4 @@
-# Astro Starter Kit: Basics
+# Cultura vive
 
 ```sh
 pnpm create astro@latest -- --template basics
